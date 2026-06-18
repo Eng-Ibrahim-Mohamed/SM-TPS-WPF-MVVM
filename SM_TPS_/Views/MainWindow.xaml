@@ -1,0 +1,264 @@
+﻿<Window x:Class="SM_TPS_.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:SM_TPS_.ViewModels"
+        mc:Ignorable="d"
+        Title="SM-TPS"
+        Height="850"
+        Width="1300"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.DataContext>
+        <vm:ViewsMainViewModel/>
+    </Window.DataContext>
+
+    <Grid Background="#F5F5F5">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border Background="#1E293B"
+                Grid.Row="0">
+
+            <TextBlock Text="Store Management &amp; TPS"
+                       Foreground="White"
+                       FontSize="28"
+                       FontWeight="Bold"
+                       VerticalAlignment="Center"
+                       Margin="20,0,0,0"/>
+        </Border>
+
+        <Grid Grid.Row="1"
+              Margin="15">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0"
+                    Background="White"
+                    CornerRadius="10"
+                    Padding="15"
+                    Margin="0,0,10,0">
+
+                <StackPanel>
+
+                    <TextBlock Text="Add Product"
+                               FontSize="22"
+                               FontWeight="Bold"
+                               Margin="0,0,0,20"/>
+
+                    <TextBlock Text="Product Name"
+                               FontWeight="SemiBold"/>
+
+                    <TextBox Height="35"
+                             Margin="0,5,0,15"
+                             FontSize="14"
+                             Text="{Binding ProductName, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <TextBlock Text="Price"
+                               FontWeight="SemiBold"/>
+
+                    <TextBox Height="35"
+                             Margin="0,5,0,15"
+                             FontSize="14"
+                             Text="{Binding ProductPrice, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <TextBlock Text="Stock Quantity"
+                               FontWeight="SemiBold"/>
+
+                    <TextBox Height="35"
+                             Margin="0,5,0,20"
+                             FontSize="14"
+                             Text="{Binding StockQuantity, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <Button Content="Add Product"
+                            Height="40"
+                            Margin="0,10,0,0"
+                            FontSize="16"
+                            FontWeight="Bold"
+                            Background="#2563EB"
+                            Foreground="White"
+                            Command="{Binding AddProductCommand}"/>
+
+                    <Button Content="Delete Product"
+                            Height="40"
+                            Margin="0,10,0,0"
+                            FontSize="16"
+                            FontWeight="Bold"
+                            Background="#DC2626"
+                            Foreground="White"
+                            Command="{Binding DeleteProductCommand}"/>
+                    <Button Content="Update Product"
+                            Height="40"
+                            Margin="0,10,0,0"
+                            FontSize="16"
+                            FontWeight="Bold"
+                            Background="#F59E0B"
+                            Foreground="White"
+                            Command="{Binding UpdateProductCommand}"/>
+
+                    <Button Content="Add To Cart"
+                            Height="40"
+                            Margin="0,10,0,0"
+                            FontSize="16"
+                            FontWeight="Bold"
+                            Background="#16A34A"
+                            Foreground="White"
+                            Command="{Binding AddToCartCommand}"/>
+
+                </StackPanel>
+
+            </Border>
+
+            <Border Grid.Column="1"
+                    Background="White"
+                    CornerRadius="10"
+                    Padding="15">
+
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+
+                    <StackPanel>
+
+                        <TextBlock Text="Products"
+                                   FontSize="22"
+                                   FontWeight="Bold"
+                                   Margin="0,0,0,20"/>
+
+                        <DataGrid ItemsSource="{Binding Products}"
+                                  SelectedItem="{Binding SelectedProduct}"
+                                  AutoGenerateColumns="False"
+                                  Height="250"
+                                  CanUserAddRows="False"
+                                  FontSize="14">
+
+                            <DataGrid.CellStyle>
+                                <Style TargetType="DataGridCell">
+                                    <Setter Property="BorderThickness" Value="0"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsLowStock}" Value="True">
+                                            <Setter Property="Background" Value="#FFEBEE"/>
+                                            <Setter Property="Foreground" Value="#C62828"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.CellStyle>
+
+                            <DataGrid.Columns>
+
+                                <DataGridTextColumn Header="Product Name"
+                                                    Binding="{Binding Name}"
+                                                    Width="*" />
+
+                                <DataGridTextColumn Header="Price"
+                                                    Binding="{Binding Price}"
+                                                    Width="150" />
+
+                                <DataGridTextColumn Header="Stock Qty"
+                                                    Binding="{Binding StockQuantity}"
+                                                    Width="120" />
+                                <DataGridTextColumn Header="Status"
+                                                    Binding="{Binding IsLowStock}"
+                                                    Width="120" />
+
+                            </DataGrid.Columns>
+
+                        </DataGrid>
+
+                        <TextBlock Text="Cart"
+                                   FontSize="22"
+                                   FontWeight="Bold"
+                                   Margin="0,20,0,10"/>
+
+                        <DataGrid ItemsSource="{Binding CartProducts}"
+                                  AutoGenerateColumns="False"
+                                  Height="220"
+                                  CanUserAddRows="False"
+                                  FontSize="14">
+
+                            <DataGrid.Columns>
+
+                                <DataGridTextColumn Header="Name"
+                                                    Binding="{Binding Name}"
+                                                    Width="*" />
+
+                                <DataGridTextColumn Header="Price"
+                                                    Binding="{Binding Price}"
+                                                    Width="120" />
+
+                                <DataGridTextColumn Header="Quantity"
+                                                    Binding="{Binding Quantity}"
+                                                    Width="120" />
+
+                                <DataGridTextColumn Header="Total"
+                                                    Binding="{Binding Total}"
+                                                    Width="120" />
+
+                            </DataGrid.Columns>
+
+                        </DataGrid>
+
+                        <TextBlock Text="{Binding Subtotal, StringFormat=Subtotal: {0} EGP}"
+                                   FontSize="18"
+                                   FontWeight="Bold"
+                                   Margin="0,10,0,5"/>
+
+                        <TextBlock Text="{Binding VAT, StringFormat=VAT: {0} EGP}"
+                                   FontSize="18"
+                                   FontWeight="Bold"
+                                   Margin="0,0,0,5"/>
+
+                        <TextBlock Text="{Binding Total, StringFormat=Final Total: {0} EGP}"
+                                   FontSize="22"
+                                   FontWeight="Bold"
+                                   Margin="0,0,0,10"/>
+
+                        <Button Content="Checkout"
+                                Height="45"
+                                FontSize="18"
+                                FontWeight="Bold"
+                                Background="#EA580C"
+                                Foreground="White"
+                                Command="{Binding CheckoutCommand}"/>
+                        <TextBlock Text="Transaction History"
+                                   FontSize="22"
+                                   FontWeight="Bold"
+                                   Margin="0,20,0,10"/>
+
+                        <ListBox ItemsSource="{Binding TransactionHistory}"
+         SelectedItem="{Binding SelectedTransaction, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+         Height="150"
+         FontSize="14">
+
+                            <!-- 🎨 تصميم شكل السطر جوه الهيستوري وتأكيد الـ Binding عند الضغط -->
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" Margin="5">
+                                        <TextBlock Text="🧾 Invoice #" FontWeight="Bold" Foreground="#2563EB"/>
+                                        <TextBlock Text="{Binding InvoiceId}" FontWeight="Bold" Margin="0,0,15,0"/>
+
+                                        <TextBlock Text="📅 " Foreground="#64748B"/>
+                                        <TextBlock Text="{Binding Timestamp, StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" Margin="0,0,15,0" Foreground="#64748B"/>
+
+                                        <TextBlock Text="💰 Total: " FontWeight="SemiBold"/>
+                                        <TextBlock Text="{Binding FinalTotal, StringFormat={}{0} EGP}" FontWeight="Bold" Foreground="#16A34A"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+
+                    </StackPanel>
+
+                </ScrollViewer>
+
+            </Border>
+
+        </Grid>
+
+    </Grid>
+</Window>
